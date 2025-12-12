@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.wsdfinalteamproject.mapper.MemberMapper">
+
+    <resultMap id="memberResultMap" type="org.example.wsdfinalteamproject.domain.MemberVO">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="nickname" column="nickname"/>
+        <result property="email" column="email"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <insert id="insertMember" parameterType="MemberVO" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO user (username, password, nickname, email, created_at)
+        VALUES (#{username}, #{password}, #{nickname}, #{email}, NOW())
+    </insert>
+
+    <select id="selectMemberByUsername" parameterType="String" resultMap="memberResultMap">
+        SELECT user_id, username, password, nickname, email, created_at
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <select id="selectMemberById" parameterType="int" resultMap="memberResultMap">
+        SELECT user_id, username, password, nickname, email, created_at
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="countMemberByNickname" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM user
+        WHERE nickname = #{nickname}
+    </select>
+
+</mapper>
