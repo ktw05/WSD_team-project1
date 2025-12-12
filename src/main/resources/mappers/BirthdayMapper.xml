@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.wsdfinalteamproject.mapper.BirthdayMapper">
+
+    <resultMap id="birthdayResultMap" type="org.example.wsdfinalteamproject.domain.BirthdayVO">
+        <id property="id" column="id"/>
+        <result property="groupName" column="group_name"/>
+        <result property="birthdayDate" column="birthday_date"/>
+        <result property="birthdayImgUrl" column="birthday_img_url"/>
+        <result property="birthdayPersonName" column="birthday_person_name"/>
+        <result property="celebrationText" column="celebration_text"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="viewCount" column="view_count"/> </resultMap>
+
+    <resultMap id="messageResultMap" type="org.example.wsdfinalteamproject.domain.MessageVO">
+        <id property="id" column="id"/>
+        <result property="postId" column="post_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="commentText" column="comment_text"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <insert id="insertBirthdayBoard" parameterType="BirthdayVO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO main_function_table
+        (group_name, birthday_date, birthday_img_url, birthday_person_name, celebration_text, created_at, view_count)
+        VALUES
+            (#{groupName}, #{birthdayDate}, #{birthdayImgUrl}, #{birthdayPersonName}, #{celebrationText}, NOW(), 0)
+    </insert>
+
+    <select id="selectBirthdayList" resultMap="birthdayResultMap">
+        SELECT id, group_name, birthday_date, birthday_img_url, birthday_person_name, created_at, view_count
+        FROM main_function_table
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (birthday_person_name LIKE CONCAT('%', #{searchKeyword}, '%') OR group_name LIKE CONCAT('%', #{searchKeyword}, '%'))
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="sortCriteria == 'popular'">view_count DESC, created_at DESC</when>
+            <when test="sortCriteria == 'birthday'">birthday_date ASC, created_at DESC</when>
+            <otherwise>created_at DESC</otherwise> </choose>
+    </select>
+
+    <select id="selectBirthdayBoardById" parameterType="int" resultMap="birthdayResultMap">
+        SELECT *
+        FROM main_function_table
+        WHERE id = #{id}
+    </select>
+
+    <update id="incrementViewCount" parameterType="int">
+        UPDATE main_function_table
+        SET view_count = view_count + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateBirthdayBoard" parameterType="BirthdayVO">
+        UPDATE main_function_table
+        SET
+            group_name = #{groupName},
+            birthday_date = #{birthdayDate},
+            birthday_img_url = #{birthdayImgUrl},
+            birthday_person_name = #{birthdayPersonName},
+            celebration_text = #{celebrationText}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteBirthdayBoard" parameterType="int">
+        DELETE FROM main_function_table
+        WHERE id = #{id}
+    </delete>
+
+    <insert id="insertMessage" parameterType="MessageVO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment_table (post_id, user_id, comment_text, created_at)
+        VALUES (#{postId}, #{userId}, #{commentText}, NOW())
+    </insert>
+
+    <select id="selectMessagesByBoardId" parameterType="int" resultMap="messageResultMap">
+        SELECT T1.*, T2.nickname as user_nickname  FROM comment_table T1
+                                                            JOIN user T2 ON T1.user_id = T2.user_id
+        WHERE T1.post_id = #{postId}
+        ORDER BY T1.created_at DESC
+    </select>
+
+</mapper>
