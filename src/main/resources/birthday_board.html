@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="boardTitle">생일 보드 상세 | 온라인 생일 축하 게시판</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <style>
+        /* birthday_board.html 전용 스타일 */
+        .board-detail-container {
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .board-header {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .board-header h2 {
+            font-size: 2.2rem;
+            color: #4a90e2;
+            margin-bottom: 5px;
+        }
+        .board-info {
+            font-size: 0.95rem;
+            color: #777;
+        }
+        .board-info span {
+            margin-right: 15px;
+        }
+        .board-image-wrap {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .board-image {
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .board-content {
+            padding: 20px 0;
+            line-height: 1.8;
+            border-bottom: 1px solid #eee;
+            white-space: pre-wrap; /* 축하 글 내용 줄바꿈 유지 */
+        }
+        /* 댓글 영역 */
+        .comment-section {
+            margin-top: 30px;
+        }
+        .comment-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-left: 5px solid #f7b038;
+            padding-left: 10px;
+        }
+        .comment-list {
+            padding: 0;
+        }
+        .comment-item {
+            padding: 15px;
+            border-bottom: 1px dashed #eee;
+            background: #fafafa;
+        }
+        .comment-item:last-child {
+            border-bottom: none;
+        }
+        .comment-meta {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        .comment-meta strong {
+            color: #4a90e2;
+        }
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            height: 80px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+        .comment-actions {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container nav-bar">
+        <h1 class="logo"><a href="index.html">🎂 생축게</a></h1>
+        <nav class="nav-links">
+            <a href="index.html">목록으로</a>
+            <button id="editBoardBtn" class="btn btn-secondary" style="display: none;">수정</button>
+            <button id="deleteBoardBtn" class="btn btn-secondary" style="display: none;">삭제</button>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div class="board-detail-container">
+        <div class="board-header">
+            <h2 id="birthdayPersonName">생일자 이름</h2>
+            <div class="board-info">
+                <span id="groupName">작성 공동체: -</span>
+                <span id="birthdayDate">생일: YYYY-MM-DD</span>
+                <span id="createdAt">작성 시점: YYYY-MM-DD HH:MM</span>
+                <span id="viewCount">조회수: 0</span>
+            </div>
+        </div>
+
+        <div class="board-image-wrap">
+            <img id="boardImage" src="" alt="생일 축하 이미지" class="board-image">
+        </div>
+
+        <div id="celebrationText" class="board-content">
+            축하 글 내용이 여기에 표시됩니다.
+        </div>
+    </div>
+
+    <section class="comment-section">
+        <h3>💬 축하 메시지</h3>
+
+        <form id="commentForm" class="comment-form">
+            <textarea id="commentTextarea" placeholder="따뜻한 축하 메시지를 남겨주세요." required></textarea>
+            <div class="comment-actions">
+                <button type="submit" class="btn btn-primary">메시지 작성</button>
+            </div>
+        </form>
+
+        <ul id="commentList" class="comment-list">
+            <li class="comment-item">
+                <div class="comment-meta">
+                    <strong>닉네임1</strong>님 <span style="float: right;">2025-12-12 10:00</span>
+                </div>
+                <p>생일 너무너무 축하해! 최고의 하루 보내!</p>
+            </li>
+        </ul>
+    </section>
+</main>
+
+<script src="./js/api.js"></script>
+<script src="./js/main.js"></script>
+</body>
+</html>
