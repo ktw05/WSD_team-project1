@@ -1,6 +1,6 @@
-// src/main/java/org/example/wsdproject/util/SecurityUtil.java
+// src/main/java/org/example/wsdfinalteamproject/util/SecurityUtil.java
 
-package org.example.wsdfinalteamproject.util; // <-- 패키지 이름 확인
+package org.example.wsdfinalteamproject.util;
 
 import org.springframework.stereotype.Component;
 
@@ -10,9 +10,6 @@ import org.springframework.stereotype.Component;
  */
 @Component // Spring 빈으로 등록하여 Service에서 @Autowired로 주입받을 수 있게 합니다.
 public class SecurityUtil {
-
-    // --- 실제 프로젝트에서는 BCryptPasswordEncoder를 필드로 주입받아 사용합니다. ---
-
     /**
      * 비밀번호를 암호화하여 반환합니다. (BCrypt 해싱을 가정)
      * @param rawPassword 평문 비밀번호
