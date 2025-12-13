@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>온라인 생일 축하 게시판</title>
-    <link rel="stylesheet" href="csseset.css">
-    <link rel="stylesheet" href="cssommon.css">
-    <link rel="stylesheet" href="cssain.css">
+    <link rel="stylesheet" href="/resources/css/reset.css">
+    <link rel="stylesheet" href="/resources/css/common.css">
+    <link rel="stylesheet" href="/resources/css/main.css">
 </head>
 <body>
 <header>
     <div class="container nav-bar">
-        <h1 class="logo"><a href="index.html">🎂 생축게</a></h1>
+        <h1 class="logo"><a href="/resources/index.html">🎂 생축게</a></h1>
         <nav class="nav-links">
             <a href="#" id="todayBirthdayLink">오늘의 주인공</a>
             <a href="#" id="createBoardLink" class="btn btn-primary">보드 생성</a>
-            <a href="login.html" id="loginLink">로그인</a>
+            <a href="/resources/login.html" id="loginLink">로그인</a>
         </nav>
     </div>
 </header>
@@ -29,31 +29,9 @@
             <option value="birthday">생일 날짜순</option>
         </select>
     </div>
-
-    <section class="board-list" id="boardListContainer">
-        <article class="board-card" data-board-id="1">
-            <img src="assets/images/default_birthday.jpg" alt="생일 축하 이미지" class="card-image">
-            <div class="card-content">
-                <h3 class="card-title">김한동 님</h3>
-                <p class="card-group">작성 공동체: 와이즈 스쿨</p>
-                <p class="card-date">생일: 2025-12-25</p>
-                <p class="card-views">조회수: 102</p>
-            </div>
-        </article>
-
-        <article class="board-card" data-board-id="2">
-            <img src="assets/images/another_birthday.jpg" alt="생일 축하 이미지" class="card-image">
-            <div class="card-content">
-                <h3 class="card-title">이하람 님</h3>
-                <p class="card-group">작성 공동체: 비전 공동체</p>
-                <p class="card-date">생일: 2025-05-15</p>
-                <p class="card-views">조회수: 78</p>
-            </div>
-        </article>
-    </section>
 </main>
 
-<script src="jspi.js"></script>
-<script src="jsain.js"></script>
+<script type="module" src="/resources/js/api.js"></script>
+<script type="module" src="/resources/js/main.js"></script>
 </body>
 </html>

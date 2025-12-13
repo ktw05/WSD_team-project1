@@ -24,9 +24,6 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-    // 기획서 URL 접두사: /walab.handong.edu:8080/W25_00000000_4/auth/signup 등에 대응하기 위해
-    // 실제 환경에서는 프로젝트 컨텍스트를 제거하고 사용합니다. (예: /auth/signup)
-
     @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
