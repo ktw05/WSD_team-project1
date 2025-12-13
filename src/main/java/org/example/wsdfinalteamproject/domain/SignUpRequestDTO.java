@@ -1,36 +1,39 @@
-// domain/SignUpRequestDTO.java (클라이언트로부터 받을 데이터)
-
 package org.example.wsdfinalteamproject.domain;
 
-// VO와 달리, 클라이언트가 보내는 데이터만 포함합니다.
 public class SignUpRequestDTO {
-    private String username;
+    private int id;
     private String password;
+    private String name;
+
     private String nickname;
     private String email;
 
-    // Getter, Setter, toString, Constructors... (생략)
+    // --- Getter & Setter (이게 있어야 컨트롤러가 데이터를 넣고 뺍니다) ---
 
-    public String getUsername() {
-        return username;
+    public int getId() {
+        return id;
     }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getNickname() {
         return nickname;
     }
-
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -38,17 +41,7 @@ public class SignUpRequestDTO {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "SignUpRequestDTO{" +
-                "username='" + username + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", email='" + email + '\'' +
-                '}';
     }
 }

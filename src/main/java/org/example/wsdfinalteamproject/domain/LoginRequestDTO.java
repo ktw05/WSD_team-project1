@@ -1,20 +1,27 @@
-// domain/LoginRequestDTO.java (클라이언트로부터 받을 데이터)
-
 package org.example.wsdfinalteamproject.domain;
 
-// 클라이언트가 로그인 시 보내는 ID와 비밀번호만 포함합니다.
 public class LoginRequestDTO {
-    private String username;
+
+    // 1. 로그인 화면의 <input name="id"> 값을 받음
+    private String id;
+
+    // 2. 로그인 화면의 <input name="password"> 값을 받음
     private String password;
 
-    // Getter, Setter, toString, Constructors... (생략)
+    private String name;
+    private String nickname;
+    private String email;
 
-    public String getUsername() {
-        return username;
+
+
+    // --- Getter & Setter (필수) ---
+
+    public String getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPassword() {
@@ -25,10 +32,27 @@ public class LoginRequestDTO {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "LoginRequestDTO{" +
-                "username='" + username + '\'' +
-                '}'; // 보안상 password는 출력하지 않습니다.
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
