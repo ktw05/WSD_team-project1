@@ -4,36 +4,38 @@
 
 <mapper namespace="org.example.wsdfinalteamproject.mapper.MemberMapper">
 
+    <!-- member 테이블 ↔ MemberVO 매핑 -->
     <resultMap id="memberResultMap" type="org.example.wsdfinalteamproject.domain.MemberVO">
-        <id property="userId" column="user_id"/>
-        <result property="username" column="username"/>
+        <id     property="userId"   column="user_id"/>
         <result property="password" column="password"/>
+        <result property="userName" column="user_name"/>
         <result property="nickname" column="nickname"/>
-        <result property="email" column="email"/>
-        <result property="createdAt" column="created_at"/>
+        <result property="email"    column="email"/>
+        <!-- created_at 컬럼이 DB에 없다면 매핑하지 않습니다 -->
     </resultMap>
 
-    <insert id="insertMember" parameterType="MemberVO" useGeneratedKeys="true" keyProperty="userId">
-        INSERT INTO user (username, password, nickname, email, created_at)
-        VALUES (#{username}, #{password}, #{nickname}, #{email}, NOW())
+    <!-- PK(user_id)는 VARCHAR이므로 클라이언트가 직접 값 제공: useGeneratedKeys 사용 X -->
+    <insert id="insertMember" parameterType="org.example.wsdfinalteamproject.domain.MemberVO">
+        INSERT INTO member (user_id, password, user_name, nickname, email)
+        VALUES (#{userId}, #{password}, #{userName}, #{nickname}, #{email})
     </insert>
 
-    <select id="selectMemberByUsername" parameterType="String" resultMap="memberResultMap">
-        SELECT user_id, username, password, nickname, email, created_at
-        FROM user
-        WHERE username = #{username}
+    <!-- 로그인 ID로 조회: 현재 스키마에는 username 컬럼이 없으므로 user_id로 조회 -->
+    <select id="selectMemberByUsername" parameterType="string" resultMap="memberResultMap">
+        SELECT user_id, password, user_name, nickname, email
+        FROM member
+        WHERE user_id = #{username}
     </select>
 
-    <select id="selectMemberById" parameterType="int" resultMap="memberResultMap">
-        SELECT user_id, username, password, nickname, email, created_at
-        FROM user
+    <!-- PK로 조회: PK 타입은 VARCHAR → parameterType/string, #{userId} -->
+    <select id="selectMemberById" parameterType="string" resultMap="memberResultMap">
+        SELECT user_id, password, user_name, nickname, email
+        FROM member
         WHERE user_id = #{userId}
     </select>
 
-    <select id="countMemberByNickname" parameterType="String" resultType="int">
-        SELECT COUNT(*)
-        FROM user
-        WHERE nickname = #{nickname}
+    <select id="countMemberByNickname" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM member WHERE nickname = #{nickname}
     </select>
 
 </mapper>

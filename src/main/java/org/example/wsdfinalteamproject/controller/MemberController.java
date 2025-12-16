@@ -3,12 +3,14 @@ package org.example.wsdfinalteamproject.controller;
 import org.example.wsdfinalteamproject.domain.LoginRequestDTO;
 import org.example.wsdfinalteamproject.domain.MemberVO;
 import org.example.wsdfinalteamproject.domain.SignUpRequestDTO;
+import org.example.wsdfinalteamproject.mapper.MemberMapper;
 import org.example.wsdfinalteamproject.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -115,4 +117,5 @@ public class MemberController {
         session.invalidate();
         return "redirect:/login";
     }
+
 }

@@ -28,10 +28,14 @@ public interface MemberMapper {
      * @param userId 회원 테이블의 기본 키
      * @return 해당 MemberVO 객체
      */
-    MemberVO selectMemberById(@Param("userId") int userId);
+    MemberVO selectMemberById(@Param("userId") String userId);
 
     /**
      * 닉네임이 존재하는지 확인합니다 (중복 체크)
      */
     int countMemberByNickname(@Param("nickname") String nickname);
+
+    String whoami();
+    int memberCount();
+
 }
