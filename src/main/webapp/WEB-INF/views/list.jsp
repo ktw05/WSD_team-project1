@@ -201,8 +201,26 @@
                 <span class="meta-pill">🎂 <fmt:formatDate value="${post.birthdayDate}" pattern="yyyy-MM-dd"/></span>
                 <span class="meta-pill">조회 ${post.viewCount}</span>
               </div>
-              <span>🕒 <fmt:formatDate value="${post.createdAt}" pattern="MM/dd HH:mm"/></span>
+
+              <div>
+                <span>🕒 <fmt:formatDate value="${post.createdAt}" pattern="MM/dd HH:mm"/></span>
+
+                <c:if test="
+      ${sessionScope.loginMember.role == 'ADMIN'
+        || sessionScope.loginMember.userId == post.userId}
+    ">
+                  ·
+                  <a
+                          href="${pageContext.request.contextPath}/board/delete/${post.id}"
+                          onclick="event.stopPropagation(); return confirm('정말 삭제하시겠습니까?');"
+                          style="color:#ff4d4f; font-weight:700; font-size:12px; text-decoration:none;"
+                  >
+                    삭제
+                  </a>
+                </c:if>
+              </div>
             </div>
+
           </div>
         </div>
       </c:forEach>
