@@ -115,16 +115,32 @@ public class BoardController {
     // 5. 게시글 삭제 (권한 체크 포함)
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id, HttpSession session) {
-        MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
-        if (loginMember == null) return "redirect:/member/login";
 
-        if (!canEditOrDelete(loginMember, id)) {
-            return "redirect:/board/view/" + id;
+        MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/member/login";
         }
 
+        // 1. 글 작성자 userId 가져오기
+        Integer postOwnerId = birthdayPostDAO.getPostOwnerId(id);
+        if (postOwnerId == null) {
+            return "redirect:/board/list";
+        }
+
+        // 2. 권한 체크
+        boolean isAdmin = "ADMIN".equals(loginMember.getRole());
+        boolean isOwner = loginMember.getUserId() == postOwnerId;
+
+        if (!isAdmin && !isOwner) {
+            // 권한 없음
+            return "redirect:/board/list";
+        }
+
+        // 3. 삭제 실행
         birthdayPostDAO.deletePost(id);
         return "redirect:/board/list";
     }
+
 
     // 6. 댓글 작성
     @PostMapping("/addComment")

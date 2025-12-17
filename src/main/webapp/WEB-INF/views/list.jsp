@@ -124,6 +124,25 @@
 
     /* 게시물 없을 때 */
     .empty-state { text-align: center; padding: 50px 0; color: #868E96; background: white; border: 1px dashed #dee2e6; border-radius: 16px; }
+    /* 카드 우상단 삭제 버튼 */
+    .card-actions{
+      position:absolute;
+      top:12px;
+      right:12px;
+      z-index: 5;
+    }
+    .delete-btn{
+      background: rgba(0,0,0,0.55);
+      color:#fff;
+      border:none;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .delete-btn:hover{ background: rgba(0,0,0,0.75); }
+
   </style>
 </head>
 <body>
@@ -176,6 +195,7 @@
       <c:forEach var="post" items="${posts}">
         <div class="album-card" onclick="location.href='${pageContext.request.contextPath}/board/view/${post.id}'">
           <div class="thumb">
+
             <c:choose>
               <c:when test="${not empty post.birthdayImgUrl}">
                 <img src="${pageContext.request.contextPath}/resources/upload/${post.birthdayImgUrl}" alt="birthday image">
@@ -201,8 +221,23 @@
                 <span class="meta-pill">🎂 <fmt:formatDate value="${post.birthdayDate}" pattern="yyyy-MM-dd"/></span>
                 <span class="meta-pill">조회 ${post.viewCount}</span>
               </div>
-              <span>🕒 <fmt:formatDate value="${post.createdAt}" pattern="MM/dd HH:mm"/></span>
+
+              <div>
+                <span>🕒 <fmt:formatDate value="${post.createdAt}" pattern="MM/dd HH:mm"/></span>
+
+                <c:if test="${not empty sessionScope.loginMember
+  and (sessionScope.loginMember.role == 'ADMIN'
+       or sessionScope.loginMember.userId == post.userId)}">
+                  ·
+                  <a href="${pageContext.request.contextPath}/board/delete/${post.id}"
+                     onclick="event.stopPropagation(); return confirm('정말 삭제하시겠습니까?');"
+                     style="color:#ff4d4f; font-weight:700; font-size:12px; text-decoration:none;">
+                    삭제
+                  </a>
+                </c:if>
+              </div>
             </div>
+
           </div>
         </div>
       </c:forEach>
