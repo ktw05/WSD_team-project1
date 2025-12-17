@@ -23,4 +23,6 @@ public interface BirthdayPostDAO {
     void increaseViewCount(int id);
 
     List<BirthdayPostVO> searchPosts(String keyword);
+
+    int getPostOwnerId(int id);
 }

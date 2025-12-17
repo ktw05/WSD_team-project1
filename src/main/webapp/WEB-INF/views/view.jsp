@@ -39,22 +39,29 @@
 <div class="container">
   <div class="header">
     <a href="${pageContext.request.contextPath}/board/list" class="back-btn">←</a>
-    <c:if test="${sessionScope.loginMember.role == 'ADMIN'}">
-      <a href="${pageContext.request.contextPath}/board/delete/${post.id}" class="del-btn" onclick="return confirm('정말 삭제할까요?')">글 삭제</a>
+
+    <c:set var="isAdmin" value="${sessionScope.loginMember.role == 'ADMIN'}"/>
+    <c:set var="isOwner" value="${sessionScope.loginMember.userId == post.userId}"/>
+
+    <c:if test="${isAdmin || isOwner}">
+      <div style="display:flex; gap:10px; align-items:center;">
+        <a href="${pageContext.request.contextPath}/board/edit/${post.id}" class="del-btn" style="color:#3182F6;">수정</a>
+        <a href="${pageContext.request.contextPath}/board/delete/${post.id}" class="del-btn"
+           onclick="return confirm('정말 삭제할까요?')">삭제</a>
+      </div>
     </c:if>
   </div>
+
 
   <c:if test="${not empty post.birthdayImgUrl}">
     <img src="${pageContext.request.contextPath}/resources/upload/${post.birthdayImgUrl}" class="post-img">
   </c:if>
 
   <div class="content">
-    <span class="badge">${post.groupName}</span>
+    <span class="badge">From. ${post.groupName}</span>
     <h1 class="title">${post.birthdayPersonName}</h1>
     <div class="date"><fmt:formatDate value="${post.birthdayDate}" pattern="yyyy년 MM월 dd일"/> • 조회 ${post.viewCount}</div>
-    <div class="text">
-      <c:out value="${post.celebrationText}"/>
-    </div>
+    <div class="text"><c:out value="${post.celebrationText}"/></div>
 
   </div>
 
