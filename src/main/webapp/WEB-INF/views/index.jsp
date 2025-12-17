@@ -142,7 +142,7 @@
     <h3>바로가기</h3>
 
     <div class="menu-list">
-      <a href="#" class="menu-item">
+      <a href="${pageContext.request.contextPath}/board/list" class="menu-item">
         <span class="menu-title"><span class="icon">🎂</span> 축하 게시판 구경하기</span>
         <span class="menu-desc">지금까지 128개의 축하가 오갔어요</span>
       </a>

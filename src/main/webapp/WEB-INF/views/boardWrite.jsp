@@ -16,18 +16,39 @@
       <a href="${pageContext.request.contextPath}/board/list" class="back-link">← 취소</a>
     </div>
 
-    <h1 class="logo" style="font-size: 22px;">축하 메시지 보내기</h1>
+    <h1 class="logo" style="font-size: 22px;">축하 보드 만들기 🎂</h1>
 
     <form action="${pageContext.request.contextPath}/board/writeAction" method="post">
 
+      <!-- 작성 공동체 -->
       <div class="input-group">
-        <label for="targetName">누구에게 보내나요?</label>
-        <input type="text" id="targetName" name="title" placeholder="받는 친구 이름 (예: 예찬)" required>
+        <label for="groupName">작성 공동체</label>
+        <input type="text" id="groupName" name="groupName" placeholder="예: 한동대 24학번" required>
       </div>
 
+      <!-- 생일자 이름 -->
       <div class="input-group">
-        <label for="content">내용</label>
-        <textarea id="content" name="content" class="text-area-custom" placeholder="따뜻한 축하의 말을 남겨주세요." required></textarea>
+        <label for="birthdayPersonName">누구의 생일인가요?</label>
+        <input type="text" id="birthdayPersonName" name="birthdayPersonName" placeholder="예: 예찬" required>
+      </div>
+
+      <!-- 생일 날짜 -->
+      <div class="input-group">
+        <label for="birthdayDate">생일</label>
+        <input type="date" id="birthdayDate" name="birthdayDate" required>
+      </div>
+
+      <!-- 이미지 URL (선택) -->
+      <div class="input-group">
+        <label for="birthdayImgUrl">대표 이미지 URL (선택)</label>
+        <input type="text" id="birthdayImgUrl" name="birthdayImgUrl" placeholder="https://... (없으면 비워도 됨)">
+      </div>
+
+      <!-- 축하 문구 -->
+      <div class="input-group">
+        <label for="celebrationText">축하 메시지</label>
+        <textarea id="celebrationText" name="celebrationText" class="text-area-custom"
+                  placeholder="따뜻한 축하의 말을 남겨주세요." required></textarea>
       </div>
 
       <button type="submit" class="btn-primary">
