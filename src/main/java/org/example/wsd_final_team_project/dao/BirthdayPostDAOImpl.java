@@ -1,5 +1,6 @@
 package org.example.wsd_final_team_project.dao;
 
+import org.apache.ibatis.session.SqlSession;
 import org.example.wsd_final_team_project.vo.BirthdayPostVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,9 @@ public class BirthdayPostDAOImpl implements BirthdayPostDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private SqlSession sqlSession;
 
     @Override
     public int insertPost(BirthdayPostVO vo) {
@@ -75,4 +79,13 @@ public class BirthdayPostDAOImpl implements BirthdayPostDAO {
         String param = "%" + keyword + "%";
         return jdbcTemplate.query(sql, new PostRowMapper(), param, param);
     }
+
+    @Override
+    public int getPostOwnerId(int id) {
+        return sqlSession.selectOne(
+                "org.example.wsd_final_team_project.dao.BirthdayPostDAO.getPostOwnerId",
+                id
+        );
+    }
+
 }

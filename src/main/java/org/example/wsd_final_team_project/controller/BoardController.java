@@ -55,28 +55,36 @@ public class BoardController {
 
     // 3. 글쓰기 처리 (파일 업로드 포함)
     @PostMapping("/writeAction")
-    public String writeAction(BirthdayPostVO vo,
-                              @RequestParam("file") MultipartFile file,
-                              HttpServletRequest request) throws IOException {
+    public String writeAction(
+            BirthdayPostVO vo,
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request,
+            HttpSession session
+    ) throws IOException {
 
-        // 파일이 비어있지 않다면 업로드 처리
+        MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/member/login";
+        }
+
+        // ✅ 작성자 설정
+        vo.setUserId(loginMember.getUserId());
+
+        // 파일 업로드
         if (!file.isEmpty()) {
-            // 저장할 실제 경로 구하기 (webapp/resources/upload)
             String realPath = request.getSession().getServletContext().getRealPath("/resources/upload");
             File dir = new File(realPath);
-            if (!dir.exists()) dir.mkdirs(); // 폴더 없으면 생성
+            if (!dir.exists()) dir.mkdirs();
 
-            // 파일 이름 중복 방지를 위해 UUID 사용
-            String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
             file.transferTo(new File(realPath, filename));
-
-            // DB에 파일 경로 저장 (VO에 세팅)
             vo.setBirthdayImgUrl(filename);
         }
 
         birthdayPostDAO.insertPost(vo);
         return "redirect:/board/list";
     }
+
 
     // 4. 게시글 상세 보기 (+ 댓글 목록)
     @GetMapping("/view/{id}")
@@ -95,9 +103,25 @@ public class BoardController {
         return "view";
     }
 
-    // 5. 게시글 삭제
+    //  공통 권한 체크 함수(컨트롤러 내부 private 메서드로)
+    private boolean canEditOrDelete(MemberVO loginMember, int postId) {
+        if (loginMember == null) return false;
+        if ("ADMIN".equals(loginMember.getRole())) return true;
+
+        int ownerId = birthdayPostDAO.getPostOwnerId(postId);
+        return ownerId == loginMember.getUserId();
+    }
+
+    // 5. 게시글 삭제 (권한 체크 포함)
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") int id, HttpSession session) {
+        MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
+        if (loginMember == null) return "redirect:/member/login";
+
+        if (!canEditOrDelete(loginMember, id)) {
+            return "redirect:/board/view/" + id;
+        }
+
         birthdayPostDAO.deletePost(id);
         return "redirect:/board/list";
     }
@@ -118,5 +142,63 @@ public class BoardController {
     public String deleteComment(int id, int postId) {
         commentDAO.deleteComment(id);
         return "redirect:/board/view/" + postId;
+    }
+
+    //  8. 수정 페이지 이동
+    @GetMapping("/edit/{id}")
+    public String editPage(@PathVariable("id") int id, Model model, HttpSession session) {
+        MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
+        if (loginMember == null) return "redirect:/member/login";
+
+        if (!canEditOrDelete(loginMember, id)) {
+            return "redirect:/board/view/" + id;
+        }
+
+        BirthdayPostVO post = birthdayPostDAO.getPost(id);
+        model.addAttribute("post", post);
+        return "edit"; // edit.jsp
+    }
+
+    // 9. 수정 처리 (파일: 새 파일 없으면 기존 유지)
+    @PostMapping("/editAction")
+    public String editAction(
+            BirthdayPostVO vo,
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            HttpServletRequest request,
+            HttpSession session
+    ) throws IOException {
+
+        MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
+        if (loginMember == null) return "redirect:/member/login";
+
+        int id = vo.getId();
+        if (!canEditOrDelete(loginMember, id)) {
+            return "redirect:/board/view/" + id;
+        }
+
+        // 기존 글 정보 가져오기(기존 이미지 유지 위해)
+        BirthdayPostVO oldPost = birthdayPostDAO.getPost(id);
+        if (oldPost == null) return "redirect:/board/list";
+
+        // 파일 업로드: 새 파일 있으면 교체, 없으면 기존 유지
+        if (file != null && !file.isEmpty()) {
+            String realPath = request.getSession().getServletContext().getRealPath("/resources/upload");
+            File dir = new File(realPath);
+            if (!dir.exists()) dir.mkdirs();
+
+            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            file.transferTo(new File(realPath, filename));
+            vo.setBirthdayImgUrl(filename);
+
+            // (선택) 기존 파일 삭제하고 싶으면 여기서 oldPost.getBirthdayImgUrl() 삭제 처리 가능
+        } else {
+            vo.setBirthdayImgUrl(oldPost.getBirthdayImgUrl());
+        }
+
+        // 작성자는 수정 시 바뀌면 안 되므로 유지
+        vo.setUserId(oldPost.getUserId());
+
+        birthdayPostDAO.updatePost(vo);
+        return "redirect:/board/view/" + id;
     }
 }
