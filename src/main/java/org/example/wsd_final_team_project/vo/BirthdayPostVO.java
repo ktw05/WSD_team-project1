@@ -8,6 +8,8 @@ import java.util.Date;
 public class BirthdayPostVO {
     private int id;
     private String groupName;
+    private int userId;
+
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthdayDate;

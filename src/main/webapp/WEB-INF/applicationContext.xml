@@ -2,13 +2,16 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/context
-                           http://www.springframework.org/schema/context/spring-context.xsd">
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd">
 
+    <!-- DB 접속 정보 로드 -->
     <context:property-placeholder location="classpath:database.properties" />
 
+    <!-- DataSource (지금 DriverManagerDataSource 그대로 써도 됨) -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${jdbc.driverClassName}" />
         <property name="url" value="${jdbc.url}" />
@@ -16,10 +19,21 @@
         <property name="password" value="${jdbc.password}" />
     </bean>
 
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <!-- MyBatis SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
+
+        <!-- Mapper XML 위치 -->
+        <property name="mapperLocations" value="classpath:/mappers/*.xml" />
+
+        <!-- (선택) VO 패키지 별칭 -->
+        <property name="typeAliasesPackage" value="org.example.wsd_final_team_project.vo" />
     </bean>
 
-    <context:component-scan base-package="org.example.wsd_final_team_project.dao" />
+    <!-- Mapper 인터페이스 자동 스캔 (여기에 MemberDAO 같은 인터페이스가 있어야 함) -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="org.example.wsd_final_team_project.dao" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
 
 </beans>

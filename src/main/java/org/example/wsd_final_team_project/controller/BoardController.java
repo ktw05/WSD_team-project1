@@ -55,28 +55,36 @@ public class BoardController {
 
     // 3. 글쓰기 처리 (파일 업로드 포함)
     @PostMapping("/writeAction")
-    public String writeAction(BirthdayPostVO vo,
-                              @RequestParam("file") MultipartFile file,
-                              HttpServletRequest request) throws IOException {
+    public String writeAction(
+            BirthdayPostVO vo,
+            @RequestParam("file") MultipartFile file,
+            HttpServletRequest request,
+            HttpSession session
+    ) throws IOException {
 
-        // 파일이 비어있지 않다면 업로드 처리
+        MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
+        if (loginMember == null) {
+            return "redirect:/member/login";
+        }
+
+        // ✅ 작성자 설정
+        vo.setUserId(loginMember.getUserId());
+
+        // 파일 업로드
         if (!file.isEmpty()) {
-            // 저장할 실제 경로 구하기 (webapp/resources/upload)
             String realPath = request.getSession().getServletContext().getRealPath("/resources/upload");
             File dir = new File(realPath);
-            if (!dir.exists()) dir.mkdirs(); // 폴더 없으면 생성
+            if (!dir.exists()) dir.mkdirs();
 
-            // 파일 이름 중복 방지를 위해 UUID 사용
-            String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
             file.transferTo(new File(realPath, filename));
-
-            // DB에 파일 경로 저장 (VO에 세팅)
             vo.setBirthdayImgUrl(filename);
         }
 
         birthdayPostDAO.insertPost(vo);
         return "redirect:/board/list";
     }
+
 
     // 4. 게시글 상세 보기 (+ 댓글 목록)
     @GetMapping("/view/{id}")

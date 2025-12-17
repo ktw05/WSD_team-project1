@@ -52,7 +52,10 @@
     <span class="badge">${post.groupName}</span>
     <h1 class="title">${post.birthdayPersonName}</h1>
     <div class="date"><fmt:formatDate value="${post.birthdayDate}" pattern="yyyy년 MM월 dd일"/> • 조회 ${post.viewCount}</div>
-    <div class="text">${post.celebrationText}</div>
+    <div class="text">
+      <c:out value="${post.celebrationText}"/>
+    </div>
+
   </div>
 
   <div class="divider"></div>
