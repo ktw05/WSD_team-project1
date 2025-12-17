@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class MemberDAOImpl implements MemberDAO {
@@ -48,7 +49,20 @@ public class MemberDAOImpl implements MemberDAO {
             vo.setNickname(rs.getString("nickname"));
             vo.setEmail(rs.getString("email"));
             vo.setCreatedAt(rs.getDate("created_at"));
+            vo.setRole(rs.getString("role"));
             return vo;
         }
+    }
+
+    @Override
+    public List<MemberVO> getAllMembers() {
+        String sql = "SELECT * FROM Member ORDER BY user_id DESC";
+        return jdbcTemplate.query(sql, new MemberRowMapper());
+    }
+
+    @Override
+    public int deleteMember(int userId) {
+        String sql = "DELETE FROM Member WHERE user_id = ?";
+        return jdbcTemplate.update(sql, userId);
     }
 }

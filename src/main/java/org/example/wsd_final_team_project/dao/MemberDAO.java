@@ -2,6 +2,8 @@ package org.example.wsd_final_team_project.dao;
 
 import org.example.wsd_final_team_project.vo.MemberVO;
 
+import java.util.List;
+
 public interface MemberDAO {
     // 회원가입
     int insertMember(MemberVO vo);
@@ -11,4 +13,7 @@ public interface MemberDAO {
 
     // 닉네임 중복 체크 (선택 사항)
     int checkNickname(String nickname);
+
+    List<MemberVO> getAllMembers(); // 회원 전체 목록 가져오기
+    int deleteMember(int userId);   // 회원 강제 탈퇴 시키기
 }

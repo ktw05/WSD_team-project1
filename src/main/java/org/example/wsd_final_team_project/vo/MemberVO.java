@@ -11,4 +11,5 @@ public class MemberVO {
     private String nickname;     // nickname (화면 표시 이름)
     private String email;        // email
     private Date createdAt;      // created_at
+    private String role;        //관리자
 }
