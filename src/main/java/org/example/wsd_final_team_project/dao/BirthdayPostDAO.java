@@ -21,4 +21,6 @@ public interface BirthdayPostDAO {
 
     // 조회수 증가
     void increaseViewCount(int id);
+
+    List<BirthdayPostVO> searchPosts(String keyword);
 }

@@ -67,4 +67,12 @@ public class BirthdayPostDAOImpl implements BirthdayPostDAO {
             return vo;
         }
     }
+
+    @Override
+    public List<BirthdayPostVO> searchPosts(String keyword) {
+        // 생일자 이름(birthday_person_name) 또는 그룹명(group_name)으로 검색
+        String sql = "SELECT * FROM BirthdayPost WHERE birthday_person_name LIKE ? OR group_name LIKE ? ORDER BY created_at DESC";
+        String param = "%" + keyword + "%";
+        return jdbcTemplate.query(sql, new PostRowMapper(), param, param);
+    }
 }

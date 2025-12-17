@@ -30,8 +30,16 @@ public class BoardController {
 
     // 1. 전체 게시글 목록 (메인 화면)
     @GetMapping("/list")
-    public String list(Model model) {
-        List<BirthdayPostVO> list = birthdayPostDAO.getPostList();
+    public String list(Model model, @RequestParam(value = "keyword", required = false) String keyword) {
+        List<BirthdayPostVO> list;
+
+        // 검색어가 있으면 검색(searchPosts), 없으면 전체보기(getPostList)
+        if (keyword != null && !keyword.isEmpty()) {
+            list = birthdayPostDAO.searchPosts(keyword);
+        } else {
+            list = birthdayPostDAO.getPostList();
+        }
+
         model.addAttribute("posts", list);
         return "list"; // list.jsp
     }
