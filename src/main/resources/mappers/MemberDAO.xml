@@ -19,7 +19,7 @@
     </select>
 
     <insert id="insertMember" parameterType="MemberVO">
-        INSERT INTO Member(username, password, nickname, email, created_at, role)
+        INSERT INTO Member(username, password, nickname, email, created_at)
         VALUES (#{username}, #{password}, #{nickname}, #{email}, NOW())
     </insert>
 
