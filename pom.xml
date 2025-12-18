@@ -106,7 +106,7 @@
     </dependencies>
 
     <build>
-        <finalName>W25_22400286_1</finalName>
+        <finalName>W25_22400191_1</finalName>
 
         <plugins>
             <plugin>
