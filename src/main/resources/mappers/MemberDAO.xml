@@ -20,7 +20,7 @@
 
     <insert id="insertMember" parameterType="MemberVO">
         INSERT INTO Member(username, password, nickname, email, created_at, role)
-        VALUES (#{username}, #{password}, #{nickname}, #{email}, NOW(), #{role})
+        VALUES (#{username}, #{password}, #{nickname}, #{email}, NOW())
     </insert>
 
     <!-- 닉네임 중복 체크 -->
